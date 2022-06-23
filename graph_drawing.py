@@ -1,5 +1,5 @@
 import json
-from typing import List
+from typing import List, Dict, Tuple, Any
 
 import networkx as nx
 import plotly.graph_objects as go
@@ -9,16 +9,15 @@ from csv import reader
 
 def load_nodes(path_nodes='graph_nodes.csv'):
     lista_nodi = list()
-    with open(path_nodes, 'r') as read_obj:
+    with open('graph_nodes.csv', 'r') as read_obj:
         csv_reader = reader(read_obj)
-        header: list[str] = next(csv_reader)
+        header = next(csv_reader)
         # Check file as empty
-        if header is not None:
+        if header != None:
             # Iterate over each row after the header in the csv
             for row in csv_reader:
                 # row variable is a list that represents a row in csv
                 lista_nodi.append(row[0:3])
-
     return lista_nodi
 
 
@@ -80,9 +79,10 @@ def drawing_2D(nodi, node_labels, links, link_label):
 
 
 nodes = load_nodes()
+print(len(nodes))
 node_label = load_nodes_label()
 
 edges = load_edges()
-links_label = load_edges_label()
+links_label= load_edges_label()
 
-drawing_2D(nodes, node_label, edges, links_label)
+drawing_2D(nodi=nodes, node_labels=node_label, links=edges, link_label=links_label)
