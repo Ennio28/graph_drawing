@@ -74,15 +74,17 @@ def drawing_2D(nodi, node_labels, links, link_label):
     G.add_edges_from(links)
 
     pos = nx.spring_layout(G, seed=2)
-    pos = nx.kamada_kawai_layout(G, pos=pos)
-    pos = nx.spring_layout(G, seed=2, pos=pos)
+    nx.draw_networkx_nodes(G, alpha=0.4, pos=pos)
+    nx.draw_networkx_edges(G, width=0.5, pos=pos)
+    nx.draw_networkx_edge_labels(G, edge_labels=link_label, pos=pos)
 
-    nx.draw_networkx_nodes(G, pos=pos, alpha=0.4)
-    nx.draw_networkx_edges(G, pos=pos, width=0.5)
+    # nx.draw_networkx(G, pos=pos, arrows=True, arrowsize=15, with_labels=True, node_size=250, style='dashed')
 
-    nx.draw_networkx_edge_labels(G, pos=pos, edge_labels=link_label)
+    #pos = nx.spring_layout(G, seed=6)
+    #pos = nx.kamada_kawai_layout(G)
+    pos = nx.spring_layout(G, seed=2)
+   # pos = nx.random_layout(G)
 
-   # nx.draw_networkx(G, pos=pos, arrows=True, arrowsize=15, with_labels=True, node_size=250, style='dashed')
     nx.draw(G, pos, with_labels=True)
     plt.show()
 
@@ -95,3 +97,5 @@ edges = load_edges()
 links_label = load_edges_label()
 
 drawing_2D(nodi=nodes, node_labels=node_label, links=edges, link_label=links_label)
+
+
