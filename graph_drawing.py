@@ -1,8 +1,6 @@
 import json
-from typing import List, Dict, Tuple, Any
-
 import networkx as nx
-import plotly.graph_objects as go
+#import plotly.graph_objects as go
 import matplotlib.pyplot as plt
 from csv import reader
 
@@ -13,7 +11,7 @@ def load_nodes(path_nodes='graph_nodes.csv'):
         csv_reader = reader(read_obj)
         header = next(csv_reader)
         # Check file as empty
-        if header != None:
+        if header is not None:
             # Iterate over each row after the header in the csv
             for row in csv_reader:
                 # row variable is a list that represents a row in csv
@@ -25,7 +23,6 @@ def load_nodes(path_nodes='graph_nodes.csv'):
 
 
 def load_edges(path_edges="graph.json"):
-    graph = None
     with open(path_edges) as json_file:
         graph = json.load(json_file)
 
@@ -39,21 +36,18 @@ def load_edges(path_edges="graph.json"):
 
 
 def load_edges_label(path_edges_label="graph.json"):
-    graph = None
-    with open("graph.json") as json_file:
+    with open(path_edges_label) as json_file:
         graph = json.load(json_file)
 
     edge_labels = dict()
+    i = 1
     for edge in graph["links"]:
-        edge_labels[edge["source"], edge["target"]] = edge['action_description']
-
-    print("Label archi da rappresentare")
-    print(len(edge_labels))
+        edge_labels[(edge["source"], edge["target"], int(edge['action']) * i * 3)] = edge["action_description"]
+        i = i + 1
     return edge_labels
 
 
 def load_nodes_label(path="graph.json"):
-    graph = None
     with open(path) as json_file:
         graph = json.load(json_file)
 
@@ -67,7 +61,6 @@ def load_nodes_label(path="graph.json"):
 
 
 def load_genere(path="graph.json"):
-    graph = None
     with open(path) as json_file:
         graph = json.load(json_file)
     maschi = list()
@@ -88,58 +81,37 @@ def load_genere(path="graph.json"):
     return neutri, maschi, femmine
 
 
-def drawing_2D(nodi, node_labels, links, link_label):
-    G = nx.DiGraph()
+def drawing_2D(nodi, node_labels, links):
+    print("Inizio del disegno")
+    G = nx.MultiDiGraph()
 
     for nodo in nodi:
         G.add_nodes_from(nodo)
 
     G.add_edges_from(links)
+
+
 
     print("Numero di archi nel grafo")
     print(G.number_of_edges())
     print("Numero di nodi nel grafo")
     print(G.number_of_nodes())
 
-    pos = nx.spring_layout(G, seed=2)
-    nx.draw_networkx_nodes(G, alpha=0.4, pos=pos, )
-    nx.draw_networkx_edges(G, width=0.5, pos=pos)
-    nx.draw_networkx_edge_labels(G, edge_labels=link_label, pos=pos)
+    with open("graph.json") as json_file:
+        graph = json.load(json_file)
 
-    #nx.draw_networkx(G, pos=pos, arrows=True, arrowsize=12, with_labels=True, node_size=250, style='dashed')
+    edge_labels = list()
+    for edge in graph["links"]:
+        edge_labels.append((edge["source"], edge["target"], int(edge['action'])))
+        G.add_weighted_edges_from(edge_labels[-1])
 
-    pos = nx.spiral_layout(G, dim=2, resolution=1)
-    pos = nx.spring_layout(G, seed=6, pos=pos)
-    pos = nx.spring_layout(G, seed=2, pos=pos)
-
-    plt.figure(3, figsize=(12, 12))
-    nx.draw(G, pos, with_labels=True, node_size=1000, width=3)
-    plt.show()
-
-
-
-
-def drawing_3D(nodi, node_labels, links, link_label):
-    G = nx.DiGraph()
-
-    for nodo in nodi:
-        G.add_nodes_from(nodo)
-
-    G.add_edges_from(links)
-
+    print("Calcolo della posizione con spring")
     pos = nx.spring_layout(G, seed=2)
     nx.draw_networkx_nodes(G, alpha=0.4, pos=pos)
-    nx.draw_networkx_edges(G, width=0.5, pos=pos)
-    nx.draw_networkx_edge_labels(G, edge_labels=link_label, pos=pos)
+    nx.draw_networkx_edges(G, width=0.9, pos=pos, arrowsize=200)
 
-    nx.draw_networkx(G, pos=pos, arrows=True, arrowsize=15, with_labels=True, node_size=250, style='dashed')
-
-    # pos = nx.spring_layout(G, seed=6)
-    # pos = nx.kamada_kawai_layout(G)
-    pos = nx.spring_layout(G, seed=2)
-    # pos = nx.random_layout(G)
-
-    nx.draw(G, pos, with_labels=True)
+    plt.figure(3, figsize=(10, 10))
+    nx.draw(G, pos, with_labels=True, node_size=450)
     plt.show()
 
 
@@ -149,6 +121,6 @@ node_label = load_nodes_label()
 edges = load_edges()
 links_label = load_edges_label()
 
-drawing_2D(nodi=nodes, node_labels=node_label, links=edges, link_label=links_label)
+drawing_2D(nodi=nodes, node_labels=node_label, links=edges)
 
 load_genere()
