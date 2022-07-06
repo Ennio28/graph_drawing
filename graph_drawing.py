@@ -1,11 +1,10 @@
-
 import json
-import plotly.graph_objects as go
-import matplotlib.pyplot as plt
 from csv import reader
 
+import matplotlib.pyplot as plt
 import networkx as nx
-
+import plotly.graph_objects as go
+import plotly.offline as py
 
 
 def load_nodes(path_nodes='graph_nodes.csv'):
@@ -28,13 +27,21 @@ def load_nodes(path_nodes='graph_nodes.csv'):
 lista_nodi = load_nodes()
 
 
-def load_edges(path_edges="graph.json"):
+def load_edges(path_edges="graph.json", interactive=False):
     with open(path_edges) as json_file:
         graph = json.load(json_file)
 
     lista_archi = list()
-    for arco in graph["links"]:
-        lista_archi.append((arco["source"], arco["target"]))
+
+    if not interactive:
+        for arco in graph["links"]:
+            lista_archi.append((arco["source"], arco["target"]))
+
+    if interactive:
+        for arco in graph["links"]:
+            exit_count = lista_archi.count((arco["source"], arco["target"]))
+            if exit_count < 1:
+                lista_archi.append((arco["source"], arco["target"]))
 
     print("Archi da rappresentare")
     print(len(lista_archi))
@@ -136,10 +143,11 @@ print(len(neutri) + len(maschi) + len(femmine))
 
 def drawing_2D():
     G = nx.MultiDiGraph()
-
+    lista_nodi = load_nodes()
     print("Numero nodi da rappresentare:")
     print(len(lista_nodi))
     print("-----------------------------")
+    lista_archi = load_edges(interactive=False)
     print("Numero archi da rappresentare:")
     print(len(lista_archi))
     lista_label_archi = load_edges_label()
@@ -185,21 +193,23 @@ def drawing_2D():
     print(G.number_of_edges())
 
 
-drawing_2D()
+# drawing_2D()
 
 
 def drawing_2D_interactive():
     G = nx.MultiDiGraph()
-
-    print("Numero nodi da rappresentare:")
+    print("START DRAWING")
+    lista_nodi = load_nodes()
     print(len(lista_nodi))
     print("-----------------------------")
     print("Numero archi da rappresentare:")
+    lista_archi = load_edges(interactive=False)
     print(len(lista_archi))
     lista_label_archi = load_edges_label()
+
     G.add_nodes_from(lista_nodi)
-    for nodo in lista_archi:
-        G.add_edge(nodo[0], nodo[1], label=lista_label_archi.pop(0))
+    for arco in lista_archi:
+        G.add_edge(arco[0], arco[1], label=lista_label_archi.pop(0))
 
     graph = None
     with open("graph.json") as json_file:
@@ -211,8 +221,8 @@ def drawing_2D_interactive():
 
     spiral = nx.spiral_layout(G, resolution=2.5)
     spring_pos = nx.spring_layout(G, seed=10, k=1.5, pos=spiral)
-    # kamada_pos = nx.kamada_kawai_layout(G, scale=1.2, pos = spring_pos)
-    # spring_pos = nx.spring_layout(G, seed = 110, k = 1.5, pos = kamada_pos, scale=10, center=(0, 0))
+    kamada_pos = nx.kamada_kawai_layout(G, scale=1.2, pos=spring_pos)
+    spring_pos = nx.spring_layout(G, seed=110, k=1.5, pos=kamada_pos, scale=10, center=(0, 0))
 
     # we need to seperate the X,Y,Z coordinates for Plotly
     x_nodes_2D = [spring_pos[str(i)][0] for i in range(1, 43)]  # x-coordinates of nodes
@@ -254,18 +264,26 @@ def drawing_2D_interactive():
                                 text=node_labels,
                                 hoverinfo='text')
 
-    axis = dict(showbackground=True,
+    axis = dict(showbackground=False,
                 showline=False,
                 zeroline=False,
-                showgrid=True,
+                showgrid=False,
                 showticklabels=False,
                 title='')
+
+    edge_list_2D = G.edges()
+    annotations = list()
+    for edge in edge_list_2D:
+        annotations.append(dict(ax=spring_pos[edge[0]][0], ay=spring_pos[edge[0]][1], axref='x', ayref='y',
+                                x=spring_pos[edge[1]][0], y=spring_pos[edge[1]][1], xref='x', yref='y',
+                                showarrow=True, arrowhead=5, arrowsize= 1.3, ))
 
     # also need to create the layout for our plot
     layout = go.Layout(title="Rappresentazione 3D della saga Hrafnkel",
                        width=1080,
                        height=1025,
                        showlegend=False,
+                       annotations=annotations,
                        scene=dict(xaxis=dict(axis),
                                   yaxis=dict(axis),
                                   zaxis=dict(axis),
@@ -276,10 +294,10 @@ def drawing_2D_interactive():
     # Include the traces we want to plot and create a figure
     data = [trace_edges_2D, trace_nodes_2D]
     fig = go.Figure(data=data, layout=layout)
-
+    fig.update_layout(yaxis=dict(scaleanchor="x", scaleratio=1), plot_bgcolor='rgb(255,255,255)')
     fig.update_layout(uniformtext_minsize=3)
-    fig.show()
-
+    #fig.show()
+    py.plot(fig)
 
 
 drawing_2D_interactive()
