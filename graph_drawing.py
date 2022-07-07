@@ -234,20 +234,37 @@ def drawing_2D_interactive():
     x_edges_2D = []
     y_edges_2D = []
 
+    xtext = []
+    ytext = []
+
     # need to fill these with all of the coordiates
     for edge in edge_list_2D:
+
+
         # format: [beginning,ending,None]
         x_coords = [spring_pos[edge[0]][0], spring_pos[edge[1]][0], None]
         x_edges_2D += x_coords
+        xtext.append((spring_pos[edge[0]][0] + spring_pos[edge[1]][0]) / 2)
 
         y_coords = [spring_pos[edge[0]][1], spring_pos[edge[1]][1], None]
         y_edges_2D += y_coords
+        ytext.append((spring_pos[edge[0]][1] + spring_pos[edge[1]][1]) / 2)
+
+
+    edge_label_trace = go.Scatter(x=xtext, y=ytext, mode='text',
+                                  marker_size=0.5,
+                                  text=lista_label_archi,
+                                  textposition='top center')
 
     trace_edges_2D = go.Scatter(x=x_edges_2D,
                                 y=y_edges_2D,
                                 mode='lines+text',
-                                opacity=0.5,
+                                opacity=0.3,
                                 line=dict(color='black', width=0.4),
+
+                                marker=dict(size=8,
+                                            opacity=0.3,
+                                            line=dict(color='white', width=0.2)),
                                 text=lista_label_archi,
                                 hoverinfo='text')
 
@@ -276,7 +293,7 @@ def drawing_2D_interactive():
     for edge in edge_list_2D:
         annotations.append(dict(ax=spring_pos[edge[0]][0], ay=spring_pos[edge[0]][1], axref='x', ayref='y',
                                 x=spring_pos[edge[1]][0], y=spring_pos[edge[1]][1], xref='x', yref='y',
-                                showarrow=True, arrowhead=5, arrowsize= 1.3, ))
+                                showarrow=True, arrowhead=5, arrowsize=1.3, ))
 
     # also need to create the layout for our plot
     layout = go.Layout(title="Rappresentazione 3D della saga Hrafnkel",
@@ -284,6 +301,7 @@ def drawing_2D_interactive():
                        height=1025,
                        showlegend=False,
                        annotations=annotations,
+                       titlefont_size=16,
                        scene=dict(xaxis=dict(axis),
                                   yaxis=dict(axis),
                                   zaxis=dict(axis),
@@ -292,11 +310,11 @@ def drawing_2D_interactive():
                        hovermode='closest')
 
     # Include the traces we want to plot and create a figure
-    data = [trace_edges_2D, trace_nodes_2D]
+    data = [trace_edges_2D, trace_nodes_2D,edge_label_trace]
     fig = go.Figure(data=data, layout=layout)
     fig.update_layout(yaxis=dict(scaleanchor="x", scaleratio=1), plot_bgcolor='rgb(255,255,255)')
     fig.update_layout(uniformtext_minsize=3)
-    #fig.show()
+    # fig.show()
     py.plot(fig)
 
 
