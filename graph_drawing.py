@@ -49,8 +49,28 @@ def load_edges(path_edges="graph.json", interactive=False):
     return lista_archi
 
 
-lista_archi = load_edges(interactive=True)
-lista_archi
+
+def load_edge_label_interactive():
+    with open('graph.json') as json_file:
+        graph = json.load(json_file)
+
+    lista_tmp = list()
+    lista_label = list()
+    for arco in graph["links"]:
+        prova = 'description=' + ' ' + arco['action_description'] + ' ' + 'chapter=' + ' ' + arco[
+                "chapter"]+' ' + 'page=' + ' ' + arco['page']
+        exit_count = lista_tmp.count((arco["source"], arco["target"], arco['action']))
+        if exit_count < 1:
+            lista_tmp.append((arco["source"], arco["target"], arco['action']))
+            lista_label.append(prova)
+    print('Label archi interactive')
+    print(len(lista_label))
+    return lista_label
+
+
+temporanea = load_edge_label_interactive()
+
+print(temporanea)
 
 
 def load_nodes_label(path_nodes="graph.json"):
@@ -82,7 +102,7 @@ def load_edges_label(path_edges="graph.json"):
         lista_label_archi.append(arco["action_description"])
 
     print("Label archi da rappresentare")
-    print(len(lista_archi))
+    print(len(lista_label_archi))
     return lista_label_archi
 
 
@@ -196,20 +216,6 @@ def drawing_2D():
 
 # drawing_2D()
 
-def load_edge_label_interactive():
-    with open('graph.json') as json_file:
-        graph = json.load(json_file)
-
-    lista_label = list()
-
-    for arco in graph["links"]:
-        exit_count = lista_label.count((arco["source"], arco["target"], arco['action_description']))
-        if exit_count < 1:
-            lista_label.append((arco["source"], arco["target"], arco['action_description']))
-
-    print('Label archi interactive')
-    print(len(lista_label))
-    return lista_label
 
 
 def drawing_2D_interactive():
