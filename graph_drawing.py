@@ -49,7 +49,6 @@ def load_edges(path_edges="graph.json", interactive=False):
     return lista_archi
 
 
-
 def load_edge_label_interactive():
     with open('graph.json') as json_file:
         graph = json.load(json_file)
@@ -58,7 +57,7 @@ def load_edge_label_interactive():
     lista_label = list()
     for arco in graph["links"]:
         prova = 'description=' + ' ' + arco['action_description'] + ' ' + 'chapter=' + ' ' + arco[
-                "chapter"]+' ' + 'page=' + ' ' + arco['page']
+            "chapter"] + ' ' + 'page=' + ' ' + arco['page']
         exit_count = lista_tmp.count((arco["source"], arco["target"], arco['action']))
         if exit_count < 1:
             lista_tmp.append((arco["source"], arco["target"], arco['action']))
@@ -217,7 +216,6 @@ def drawing_2D():
 # drawing_2D()
 
 
-
 def drawing_2D_interactive():
     G = nx.MultiDiGraph()
     print("START DRAWING")
@@ -227,18 +225,17 @@ def drawing_2D_interactive():
     print("Numero archi da rappresentare:")
     lista_archi = load_edges(interactive=True)
     print(len(lista_archi))
-    lista_label_archi = load_edge_label_interactive()
+    label_archi = load_edge_label_interactive()
 
     G.add_nodes_from(lista_nodi)
     for arco in lista_archi:
-        G.add_edge(arco[0], arco[1], label=lista_label_archi.pop(0))
+        G.add_edge(arco[0], arco[1], label=label_archi.pop(0))
 
-    graph = None
     with open("graph.json") as json_file:
-        graph = json.load(json_file)
+        grafo_file = json.load(json_file)
 
         node_labels = list()
-        for node in graph["nodes"]:
+        for node in grafo_file["nodes"]:
             node_labels.append(node['label'])
 
     print('Numero nodi nel grafo')
@@ -275,11 +272,14 @@ def drawing_2D_interactive():
         y_edges_2D += y_coords
         y_text.append((spring_pos[edge[0]][1] + spring_pos[edge[1]][1]) / 2)
 
-    edge_label_trace = go.Scatter(x=x_text, y=y_text,
+    edge_label_trace = go.Scatter(x=x_text,
+                                  y=y_text,
                                   mode='text',
-                                  hoverinfo='text',
-                                  text=lista_label_archi,
-                                  textposition='middle center')
+                                  hoverinfo='all',
+                                  text=label_archi,
+                                  textposition='middle center',
+                                  marker_size=0.5,
+                                  )
 
     trace_edges_2D = go.Scatter(x=x_edges_2D,
                                 y=y_edges_2D,
@@ -290,14 +290,17 @@ def drawing_2D_interactive():
                                 marker=dict(size=8,
                                             opacity=0.3,
                                             line=dict(color='black', width=0.1)),
-                                text=lista_label_archi,
-                                hoverinfo='text')
+                                text=label_archi,
+                                hoverinfo='text',
+                                textfont=dict(
+                                    size=20
+                                ),
+                                )
 
     trace_nodes_2D = go.Scatter(x=x_nodes_2D,
                                 y=y_nodes_2D,
                                 mode='markers+text',
                                 opacity=1,
-                                # line=dict(color='white', width=0.5),
                                 marker=dict(symbol='circle',
                                             size=18,
                                             opacity=0.5,
@@ -318,7 +321,7 @@ def drawing_2D_interactive():
     for edge in edge_list_2D:
         annotations.append(dict(ax=spring_pos[edge[0]][0], ay=spring_pos[edge[0]][1], axref='x', ayref='y',
                                 x=spring_pos[edge[1]][0], y=spring_pos[edge[1]][1], xref='x', yref='y',
-                                showarrow=True, arrowhead=5, arrowsize=1.3, ))
+                                showarrow=True, arrowhead=3, arrowsize=1.5, ))
 
     # also need to create the layout for our plot
     layout = go.Layout(title="Rappresentazione interattiva della saga Hrafnkel",
@@ -326,7 +329,6 @@ def drawing_2D_interactive():
                        height=1025,
                        showlegend=False,
                        annotations=annotations,
-                       titlefont_size=16,
                        scene=dict(xaxis=dict(axis),
                                   yaxis=dict(axis),
                                   zaxis=dict(axis),
@@ -337,9 +339,10 @@ def drawing_2D_interactive():
     # Include the traces we want to plot and create a figure
     data = [trace_edges_2D, trace_nodes_2D, edge_label_trace]
     fig = go.Figure(data=data, layout=layout)
-    fig.update_layout(yaxis=dict(scaleanchor="x", scaleratio=1), plot_bgcolor='rgb(255,255,255)')
+    fig.update_layout(yaxis=dict(scaleanchor="x", scaleratio=1.3), plot_bgcolor='rgb(255,255,255)')
     fig.update_layout(uniformtext_minsize=3)
-    fig.show()
+    fig.update_traces(mode="markers+text")
+    #fig.show()
     py.plot(fig)
 
 
