@@ -62,7 +62,7 @@ Ho scelto per questo motivo di non rappresentare le label degli archi e dei nodi
 ### ```drawing_2D_interactive```
 <br/>Per il disegno del grafo, in questo metodo, ho utilizzato le librerie [networkx](https://networkx.org/documentation/stable/reference/drawing.html) e [plotly](https://plotly.com/python-api-reference/) 
 Come per gli altri metodi i nodi sono stati colorati in maniera differente a seconda del genere dei personaggi. Infatti, nel dataset i personaggi hanno tre possibili tipi di genere: _maschi_, _femmine_ e _neutri_. Per cui la scelta 
-del colore è ricaduta sui colori blu, rosa e verde rispettivamente. Sono stati scelti questi colori, per lo meno i primi due, perché di norma si usano questi colori per rappresentare il genere di una persona. Per il disegno del grafo ho usato
+del colore è ricaduta sui colori blu, rosa e verde rispettivamente. Sono stati scelti questi colori, per lo meno i primi due, perché di norma si usano questi colori per rappresentare il genere di una persona. Per il disegno del grafo ho usato<br/>
 tre metodi della libreria `networkx`:<br/>
 
 - `spiral_layout`
@@ -77,12 +77,6 @@ e facendo hovering con il mouse vengono ulteriormente mostrate.
 <br/>
 
 ## Sviluppi Futuri
-Lo sfruttamento della componente temporale potrebbe essere fondamentale per visualizzare bene questo grafo, usando come informazione il capitolo dei personaggi e delle azioni (il numero di pagina è mancante troppo spesso). Questa soluzione consente di visualizzare un sottoinsieme di nodi e archi alla volta, e di analizzare la storia seguendo una linea temporale causale, il che consentirebbe una comprensione sicuramente migliore. Un [esempio](https://observablehq.com/@d3/temporal-force-directed-graph) D3.js implementa tale funzionalità.
+<br/>Si potrebbe sfruttare la componente temporale per visualizzare il grafo in maniera più appropriata, usando come informazione il capitolo dei personaggi e delle azioni, il numero della pagina è assente troppo spesso per arrivare fino a questo dettaglio. Questo tipo di approccio consente di analizzare la Saga seguendone la linea temporale della storia, il che ne consente una comprensione migliore
 
-L'utilizzo di [forze](https://www.d3indepth.com/force-layout/#forcex-and-forcey) come ```forceX``` e ```forceY``` può essere molto utile per posizionare i nodi in una configurazione migliore, senza dover gestire il tweaking delle forze già definite (che non è sempre triviale). Tuttavia ciò richiederebbe di definire nuovi campi nel dataset che specifichino posizioni x e y per ogni nodo.
 
-Per gestire meglio le label degli archi (che a volte sono poco leggibili per nodi con grado elevato) si potrebbe visualizzare la lista di azioni in una finestra popup che viene mostrata solo quando si fa hovering del mouse sul nodo/arco di interesse, vedere [esempio](https://bl.ocks.org/almsuarez/fa9502b0087b829ef4d97e5d6d5ccfde). In questo modo non si avrebbe più necessità di visualizzare testo contemporaneamente, ma solo dove l'utente lo richiede, migliorando la leggibilità.
-
-Un'altra soluzione per gestire i numerosi archi e label è quella di compattarli in un unico arco, e gestire la lista di azioni risultante con delle icone. Queste icone saranno diverse per ogni azione del dataset, e verranno visualizzate in punti diversi dell'arco evitando sovrapposizione. Inoltre è necessario selezionare i nodi con azioni onclick, per poter poi fare hovering sulle icone per avere una descrizione dell'azione (o usare una legenda). Per fare rendering di immagini png sugli archi vedere questo [esempio](https://stackoverflow.com/questions/32143614/force-directed-graph-how-to-add-icon-in-the-middle-of-an-edge). Inoltre sono state già scaricate delle icone per una possibile implementazione di questa funzionalità, [qui](https://github.com/ale-pavel/infovis-final-project/tree/feature/icons-labels/icons) disponibili (branch feature/icons-labels).
-
-Un possibile modo di gestire la densità dei nodi è mediante una forza repulsiva, attivata quando si fa click su un nodo (che rimane fermo). In questo [esempio](https://observablehq.com/@d3/collision-detection/2?collection=@d3/d3-force) l'hovering del mouse sposta i diversi nodi.
