@@ -213,7 +213,7 @@ def drawing_2D():
     print(G.number_of_edges())
 
 
-# drawing_2D()
+drawing_2D()
 
 
 def drawing_2D_interactive():
@@ -244,9 +244,8 @@ def drawing_2D_interactive():
     print(G.number_of_edges())
 
     spiral = nx.spiral_layout(G, resolution=2.5)
-    spring_pos = nx.spring_layout(G, seed=10, k=1.5, pos=spiral)
-    kamada_pos = nx.kamada_kawai_layout(G, scale=1.2, pos=spring_pos)
-    spring_pos = nx.spring_layout(G, seed=110, k=1.5, pos=kamada_pos, scale=10, center=(0, 0))
+    kamada_pos = nx.kamada_kawai_layout(G, scale=1.2, pos=spiral)
+    spring_pos = nx.spring_layout(G, seed=110, k=1.5, pos=kamada_pos, scale=8, center=(0, 0))
 
     # we need to seperate the X,Y,Z coordinates for Plotly
     x_nodes_2D = [spring_pos[str(i)][0] for i in range(1, 43)]  # x-coordinates of nodes
@@ -275,8 +274,8 @@ def drawing_2D_interactive():
     edge_label_trace = go.Scatter(x=x_text,
                                   y=y_text,
                                   mode='text',
-                                  hoverinfo='all',
                                   text=label_archi,
+                                  hoverinfo='text',
                                   textposition='middle center',
                                   marker_size=0.5,
                                   )
@@ -324,7 +323,7 @@ def drawing_2D_interactive():
                                 showarrow=True, arrowhead=3, arrowsize=1.5, ))
 
     # also need to create the layout for our plot
-    layout = go.Layout(title="Rappresentazione interattiva della saga Hrafnkel",
+    layout = go.Layout(title="<br>Rappresentazione interattiva della saga Hrafnkel",
                        width=1080,
                        height=1025,
                        showlegend=False,
@@ -342,8 +341,8 @@ def drawing_2D_interactive():
     fig.update_layout(yaxis=dict(scaleanchor="x", scaleratio=1.3), plot_bgcolor='rgb(255,255,255)')
     fig.update_layout(uniformtext_minsize=3)
     fig.update_traces(mode="markers+text")
-    # fig.show()
-    py.plot(fig)
+    fig.show()
+    #go.plot(fig)
 
 
 drawing_2D_interactive()

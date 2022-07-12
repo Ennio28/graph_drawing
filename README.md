@@ -3,12 +3,23 @@ Progetto finale per l'esame di [Visualizzazione delle Informazioni](http://www.d
 
 
 ## Obiettivi
-L'obiettivo è esplorare il grafo della [saga islandese Hrafnkels](https://en.wikipedia.org/wiki/Hrafnkels_saga). In particolare si vuole riuscire a comprendere quali siano le relazioni tra i personaggi, definite dalle azioni che li riguardano, studiando il multigrafo a disposizione. 
+<br/>L'obiettivo è esplorare il grafo della [saga islandese Hrafnkels](https://en.wikipedia.org/wiki/Hrafnkels_saga). In particolare si vuole riuscire a comprendere quali siano le relazioni tra i personaggi, definite dalle azioni che li riguardano, studiando il multigrafo a disposizione. 
 
 Il multigrafo diretto contiene nodi con un grado (sia entrante che uscente) molto elevato (anche fino a 20-30 archi uscenti, oltre ad avere archi che partono dallo stesso nodo ed entrano nello stesso nodo.
 
-Il grafo è stato visualizzato mediante l'utilizzo della libreria networkx e plotly in Python utilizzando come algoritmo di disegno del grafo una combinazione di due algoritmi force-directed. Alcuni [esempi](https://plotly.com/python/network-graphs/). Più avanti sono state descritte le soluzioni adottate e le limitazioni presenti, insieme ai possibili sviluppi futuri.
+Il grafo è stato visualizzato mediante l'utilizzo della libreria networkx e plotly in Python utilizzando come algoritmo di disegno del grafo una combinazione di due algoritmi force-directed. Alcuni [esempi](https://plotly.com/python/network-graphs/). Più avanti sono state descritte le soluzioni adottate e le limitazioni presenti, insieme ai possibili sviluppi futuri.<br/>
 
+
+## Tecnologie e Librerie usate
+Per il disegno del grafo:
+- `Python`
+- `matplotlib.pyplot`
+- `networkx`
+- `plotly`
+
+Per l'elaborazione del dataset le librerie  :
+- `json`
+- `csv`
 
 
 ## Dataset
@@ -31,18 +42,40 @@ Il [dataset](https://github.com/Ennio28/graph_drawing/blob/master/hrafnkel_saga_
 ## Soluzioni adottate
 
 Per gestire il disegno del grafo sono state usati diversi approcci, in particolare si riportano i seguenti metodi:
-- ```drawing_2D()```: per disegnare il grafo in 2D.
-- ```drawing_3D()```: per disegnare il grafo in 3D, in maniera tale che ci si possa interagire.
-- ```drawing_2D_interactive```: per disegnare il grafo in 2D, in maniera tale che ci si possa interagire.
+- ```drawing_2D()```:  <br/>per disegnare il grafo in 2D. <br/>
+- ```drawing_3D()```:  <br/>per disegnare il grafo in 3D, in maniera tale che ci si possa interagire. <br/>
+- ```drawing_2D_interactive```:  <br/>per disegnare il grafo in 2D, in maniera tale che ci si possa interagire. <br/>
 
 ### ```drawing_2D()```
-Con questo metodo si ottiene una rappresentazione statica del grafo. Sono stati riportati tutti i nodi ed i vertici del grafo rappresentati dal dataset. La principale limitazione_di questo metodo 
-è dovuta dall'impossibilità di rappresentare le label dei multiarchi. Ciò non è possibile poiché la libreria networkx, di Python, non prevede questa feature.
-Inoltre non si può interagire con la figura, per cui si consiglia di usare il metodo ```drawing_2D_interactive```.
+ <br/>Con questo metodo si ottiene una rappresentazione statica del grafo. Sono stati riportati tutti i nodi e i vertici del grafo rappresentati dal dataset. La principale limitazione di questo metodo 
+è dovuta dall'impossibilità di rappresentare le label dei multiarchi. Ciò non è possibile poiché la libreria networkx, di Python, non prevede questa feature per archi multipli.
+Inoltre non si può interagire con la figura,al di fuori dello zoom, per cui si consiglia di usare il metodo ```drawing_2D_interactive```. <br/>
 
 ### ```drawing_3D()```
-Ho iniziato a programmare questa funzione in modo tale che l'utente finale potesse interagire con il grafo in una maniera più immersiva, ma avendo tanti nodi e tanti archi la sua visualizzazione risultava confusa. 
-Ho scelto per questo motivo di non rappresentare le label degli archi e dei nodi, in maniera tale da poter vedere la struttura del grafo in 3D. Ad ogni modo si consiglia di utilizzare la funzione  ```drawing_2D_interactive```.
+ <br/>Ho iniziato a programmare questa funzione in modo tale che l'utente finale potesse interagire con il grafo in una maniera più immersiva, ma avendo tanti nodi e tanti archi la sua visualizzazione risultava confusa. 
+Ho scelto per questo motivo di non rappresentare le label degli archi e dei nodi, in maniera tale da poter vedere la struttura del grafo in 3D.Inoltre,
+ per questo motivo, ho rappresentato un numero ridotto di archi. Gli archi rappresentati, infatti, sono solo quelli relativi ad azioni differenti<br/>
+ <br/>Ad ogni modo si consiglia di utilizzare la funzione  ```drawing_2D_interactive```. <br/>
+
+
+
+### ```drawing_2D_interactive```
+<br/>Per il disegno del grafo, in questo metodo, ho utilizzato le librerie [networkx](https://networkx.org/documentation/stable/reference/drawing.html) e [plotly](https://plotly.com/python-api-reference/) 
+Come per gli altri metodi i nodi sono stati colorati in maniera differente a seconda del genere dei personaggi. Infatti, nel dataset i personaggi hanno tre possibili tipi di genere: _maschi_, _femmine_ e _neutri_. Per cui la scelta 
+del colore è ricaduta sui colori blu, rosa e verde rispettivamente. Sono stati scelti questi colori, per lo meno i primi due, perché di norma si usano questi colori per rappresentare il genere di una persona. Per il disegno del grafo ho usato
+tre metodi della libreria `networkx`:<br/>
+
+- `spiral_layout`
+- `kamada_kawai_layout`
+- `spring_layout`
+
+
+<br/>L'output dei metodi, delle librerie, è stato passato come punto di partenza per il successivo. Sono stati scelti e messi in quest'ordine dopo un test di preferenza su un piccolo numero di utenti.<br/>
+
+<br/>È possibile fare panning e zoom sull'interfaccia grazie all'utilizzo della libreria Plotly. Inoltre per permettere di fruire meglio della visualizzazione le label dei nodi sono visualizzate sempre
+e facendo hovering con il mouse vengono ulteriormente mostrate.
+<br/>
+
 ## Sviluppi Futuri
 Lo sfruttamento della componente temporale potrebbe essere fondamentale per visualizzare bene questo grafo, usando come informazione il capitolo dei personaggi e delle azioni (il numero di pagina è mancante troppo spesso). Questa soluzione consente di visualizzare un sottoinsieme di nodi e archi alla volta, e di analizzare la storia seguendo una linea temporale causale, il che consentirebbe una comprensione sicuramente migliore. Un [esempio](https://observablehq.com/@d3/temporal-force-directed-graph) D3.js implementa tale funzionalità.
 
