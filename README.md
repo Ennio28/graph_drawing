@@ -46,12 +46,12 @@ Per gestire il disegno del grafo sono state usati diversi approcci, in particola
 - ```drawing_3D()```:  <br/>per disegnare il grafo in 3D, in maniera tale che ci si possa interagire. <br/>
 - ```drawing_2D_interactive```:  <br/>per disegnare il grafo in 2D, in maniera tale che ci si possa interagire. <br/>
 
-### ```drawing_2D()```
+## ```drawing_2D()```
  <br/>Con questo metodo si ottiene una rappresentazione statica del grafo. Sono stati riportati tutti i nodi e i vertici del grafo rappresentati dal dataset. La principale limitazione di questo metodo 
 è dovuta dall'impossibilità di rappresentare le label dei multiarchi. Ciò non è possibile poiché la libreria networkx, di Python, non prevede questa feature per archi multipli.
 Inoltre non si può interagire con la figura,al di fuori dello zoom, per cui si consiglia di usare il metodo ```drawing_2D_interactive```. <br/>
 
-### ```drawing_3D()```
+## ```drawing_3D()```
  <br/>Ho iniziato a programmare questa funzione in modo tale che l'utente finale potesse interagire con il grafo in una maniera più immersiva, ma avendo tanti nodi e tanti archi la sua visualizzazione risultava confusa. 
 Ho scelto per questo motivo di non rappresentare le label degli archi e dei nodi, in maniera tale da poter vedere la struttura del grafo in 3D.Inoltre,
  per questo motivo, ho rappresentato un numero ridotto di archi. Gli archi rappresentati, infatti, sono solo quelli relativi ad azioni differenti<br/>
@@ -59,7 +59,7 @@ Ho scelto per questo motivo di non rappresentare le label degli archi e dei nodi
 
 
 
-### ```drawing_2D_interactive```
+## ```drawing_2D_interactive```
 <br/>Per il disegno del grafo, in questo metodo, ho utilizzato le librerie [networkx](https://networkx.org/documentation/stable/reference/drawing.html) e [plotly](https://plotly.com/python-api-reference/) 
 Come per gli altri metodi i nodi sono stati colorati in maniera differente a seconda del genere dei personaggi. Infatti, nel dataset i personaggi hanno tre possibili tipi di genere: _maschi_, _femmine_ e _neutri_. Per cui la scelta 
 del colore è ricaduta sui colori blu, rosa e verde rispettivamente. Sono stati scelti questi colori, per lo meno i primi due, perché di norma si usano questi colori per rappresentare il genere di una persona. Per il disegno del grafo ho usato<br/>
