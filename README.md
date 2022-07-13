@@ -70,13 +70,14 @@ tre metodi della libreria `networkx`:<br/>
 - [spring_layout](https://networkx.org/documentation/stable/reference/generated/networkx.drawing.layout.spring_layout.html)
 
 
-<br/>L'output dei metodi, delle librerie, è stato passato come punto di partenza per il successivo. Sono stati scelti e messi in quest'ordine dopo un test di preferenza su un piccolo numero di utenti.<br/>
+<br/>L'output dei metodi, delle librerie, è stato passato come punto di partenza per il successivo. Sono stati scelti, e messi in quest'ordine, dopo un test di preferenza su un piccolo numero di utenti.<br/>
 
 <br/>È possibile fare panning e zoom sull'interfaccia grazie all'utilizzo della libreria Plotly. Inoltre per permettere di fruire meglio della visualizzazione le label dei nodi sono visualizzate sempre
 e facendo hovering con il mouse vengono ulteriormente mostrate.
 <br/>
 
 ## Sviluppi Futuri
-<br/>Si potrebbe sfruttare la componente temporale per visualizzare il grafo in maniera più appropriata, usando come informazione il capitolo dei personaggi e delle azioni, il numero della pagina è assente troppo spesso per arrivare fino a questo dettaglio. Questo tipo di approccio consente di analizzare la Saga seguendone la linea temporale della storia, il che ne consente una comprensione migliore
-
+<br/>Si potrebbe sfruttare la componente temporale per visualizzare il grafo in maniera più appropriata. 
+Usando degli sliders si consentirebbe di visualizzare un sottoinsieme di nodi ed archi seguendo la narrazione della storia.
+Infatti si potrebbero mostrare i nodi e gli archi, sfruttando la variabile relativa alle pagine. Questo tipo di approccio consente di analizzare la Saga seguendone la linea temporale della storia.<br/>
 
