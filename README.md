@@ -65,9 +65,9 @@ Come per gli altri metodi i nodi sono stati colorati in maniera differente a sec
 del colore è ricaduta sui colori blu, rosa e verde rispettivamente. Sono stati scelti questi colori, per lo meno i primi due, perché di norma si usano questi colori per rappresentare il genere di una persona. Per il disegno del grafo ho usato<br/>
 tre metodi della libreria `networkx`:<br/>
 
-- `spiral_layout`
-- `kamada_kawai_layout`
-- `spring_layout`
+- [spiral_layout](https://networkx.org/documentation/stable/reference/generated/networkx.drawing.layout.spiral_layout.html)
+- [kamada_kawai_layout](https://networkx.org/documentation/stable/reference/generated/networkx.drawing.layout.kamada_kawai_layout.html)
+- [spring_layout](https://networkx.org/documentation/stable/reference/generated/networkx.drawing.layout.spring_layout.html)
 
 
 <br/>L'output dei metodi, delle librerie, è stato passato come punto di partenza per il successivo. Sono stati scelti e messi in quest'ordine dopo un test di preferenza su un piccolo numero di utenti.<br/>
