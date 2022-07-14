@@ -17,7 +17,7 @@ Per il disegno del grafo:
 - `networkx`
 - `plotly`
 
-Per l'elaborazione del dataset le librerie  :
+Per l'elaborazione del dataset, le librerie:
 - `json`
 - `csv`
 
@@ -49,8 +49,8 @@ Per gestire il disegno del grafo sono state usati diversi approcci, in particola
 ## ```drawing_2D()```
  <br/>Con questo metodo si ottiene una rappresentazione statica del grafo. Sono stati riportati tutti i nodi e i vertici del grafo rappresentati dal dataset. La principale limitazione di questo metodo 
 è dovuta dall'impossibilità di rappresentare le label dei multiarchi. Ciò non è possibile poiché la libreria networkx, di Python, non prevede questa feature per archi multipli.
-Inoltre non si può interagire con la figura,al di fuori dello zoom, per cui si consiglia di usare il metodo ```drawing_2D_interactive```. <br/>
-
+Inoltre non si può interagire con la figura, al di fuori dello zoom, per cui si consiglia di usare il metodo ```drawing_2D_interactive```. <br/>
+ ![](graph_drawing/img.png)
 ## ```drawing_3D()```
  <br/>Ho iniziato a programmare questa funzione in modo tale che l'utente finale potesse interagire con il grafo in una maniera più immersiva, ma avendo tanti nodi e tanti archi la sua visualizzazione risultava confusa. 
 Ho scelto per questo motivo di non rappresentare le label degli archi e dei nodi, in maniera tale da poter vedere la struttura del grafo in 3D.Inoltre,

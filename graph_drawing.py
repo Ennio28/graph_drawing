@@ -1,10 +1,13 @@
 import json
+import random
 from csv import reader
 
 import matplotlib.pyplot as plt
 import networkx as nx
 import plotly.graph_objects as go
 import plotly.offline as py
+import pandas as pd
+
 
 
 def load_nodes(path_nodes='graph_nodes.csv'):
@@ -66,6 +69,23 @@ def load_edge_label_interactive():
     print(len(lista_label))
     return lista_label
 
+
+def load_edges_label_custom():
+    with open('graph.json') as json_file:
+        graph = json.load(json_file)
+
+    lista_tmp = list()
+    lista_label = list()
+    for arco in graph["links"]:
+        prova = 'description=' + ' ' + arco['action_description'] + ' ' + 'chapter=' + ' ' + arco[
+            "chapter"] + ' ' + 'page=' + ' ' + arco['page']
+        exit_count = lista_tmp.count((arco["source"], arco["target"], arco['action']))
+        if exit_count < 1:
+            lista_tmp.append((arco['action_description']))
+            lista_label.append(prova)
+    #print('Label archi interactive')
+    #print(len(lista_label))
+    return lista_tmp
 
 temporanea = load_edge_label_interactive()
 
@@ -213,7 +233,7 @@ def drawing_2D():
     print(G.number_of_edges())
 
 
-drawing_2D()
+# drawing_2D()
 
 
 def drawing_2D_interactive():
@@ -226,6 +246,7 @@ def drawing_2D_interactive():
     lista_archi = load_edges(interactive=True)
     print(len(lista_archi))
     label_archi = load_edge_label_interactive()
+    label_archi_ = label_archi.copy()
 
     G.add_nodes_from(lista_nodi)
     for arco in lista_archi:
@@ -271,29 +292,43 @@ def drawing_2D_interactive():
         y_edges_2D += y_coords
         y_text.append((spring_pos[edge[0]][1] + spring_pos[edge[1]][1]) / 2)
 
+    # a = pd.read_csv('action_codes.csv')
+    # colors=[]
+    # for x in range(0,a.shape[0]):
+    #     colors.append("#"+"%06x" % random.randint(0, 0xFFFFFF))
+    # colors_label = [colors[int(x[2])] for x in lista_archi]
+
+    action_text=load_edges_label_custom()
+
     edge_label_trace = go.Scatter(x=x_text,
                                   y=y_text,
                                   mode='text',
-                                  text=label_archi,
+                                  # text=label_archi_,
+                                  text=action_text,
                                   hoverinfo='text',
                                   textposition='middle center',
-                                  marker_size=0.5,
+                                  textfont=dict(
+                                      family="sans serif",
+                                      size=8,
+                                      color="crimson"
+                                  ),
+                                  marker_size=0.25,
                                   )
 
     trace_edges_2D = go.Scatter(x=x_edges_2D,
                                 y=y_edges_2D,
                                 mode='lines+text',
-                                opacity=0.3,
-                                line=dict(color='black', width=0.2),
+                                opacity=0.2,
+                                line=dict(color="black", width=0.2),
 
                                 marker=dict(size=8,
                                             opacity=0.3,
                                             line=dict(color='black', width=0.1)),
-                                text=label_archi,
-                                hoverinfo='text',
-                                textfont=dict(
-                                    size=20
-                                ),
+                                # text=label_archi_,
+                                # hoverinfo='text',
+                                # textfont=dict(
+                                #    size=10
+                                # ),
                                 )
 
     trace_nodes_2D = go.Scatter(x=x_nodes_2D,
@@ -336,13 +371,15 @@ def drawing_2D_interactive():
                        hovermode='closest')
 
     # Include the traces we want to plot and create a figure
-    data = [trace_edges_2D, trace_nodes_2D, edge_label_trace]
+    data = [trace_edges_2D,
+            trace_nodes_2D,
+            edge_label_trace]
     fig = go.Figure(data=data, layout=layout)
     fig.update_layout(yaxis=dict(scaleanchor="x", scaleratio=1.3), plot_bgcolor='rgb(255,255,255)')
     fig.update_layout(uniformtext_minsize=3)
     fig.update_traces(mode="markers+text")
     fig.show()
-    #go.plot(fig)
+    # go.plot(fig)
 
 
 drawing_2D_interactive()
@@ -420,7 +457,7 @@ def drawing_3D():
                                z=z_edges,
                                mode='text',
                                line=dict(color='black', width=2),
-                               #text=load_edges_label(),
+                               # text=load_edges_label(),
                                hoverinfo='text')
 
     trace_nodes = go.Scatter3d(x=x_nodes,
@@ -432,7 +469,7 @@ def drawing_3D():
                                            size=8,
                                            color=lista_colori,
                                            line=dict(color='black', width=0.9)),
-                               #text=node_labels,
+                               # text=node_labels,
                                hoverinfo='text')
 
     nodi_maschi = go.Scatter3d(x=x_maschi,
@@ -491,5 +528,6 @@ def drawing_3D():
     data = [trace_edges, trace_nodes, nodi_neutri, nodi_maschi, nodi_femmina]
     fig = go.Figure(data=data, layout=layout)
     fig.show()
+
 
 drawing_3D()
