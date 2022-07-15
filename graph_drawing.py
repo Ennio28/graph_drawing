@@ -70,6 +70,8 @@ def load_edge_label_interactive():
     return lista_label
 
 
+
+
 def load_edges_label_custom():
     with open('graph.json') as json_file:
         graph = json.load(json_file)
@@ -81,15 +83,14 @@ def load_edges_label_custom():
             "chapter"] + ' ' + 'page=' + ' ' + arco['page']
         exit_count = lista_tmp.count((arco["source"], arco["target"], arco['action']))
         if exit_count < 1:
-            lista_tmp.append((arco['action_description']))
+            lista_tmp.append(('\n'+arco['action_description'])+'\n')
             lista_label.append(prova)
-    #print('Label archi interactive')
-    #print(len(lista_label))
+    # print('Label archi interactive')
+    # print(len(lista_label))
     return lista_tmp
 
 temporanea = load_edge_label_interactive()
 
-print(temporanea)
 
 
 def load_nodes_label(path_nodes="graph.json"):
@@ -233,12 +234,12 @@ def drawing_2D():
     print(G.number_of_edges())
 
 
-# drawing_2D()
+drawing_2D()
 
 
 def drawing_2D_interactive():
     G = nx.MultiDiGraph()
-    print("START DRAWING")
+    print("START DRAWING---- 2D interactive")
     lista_nodi = load_nodes()
     print(len(lista_nodi))
     print("-----------------------------")
@@ -298,21 +299,25 @@ def drawing_2D_interactive():
     #     colors.append("#"+"%06x" % random.randint(0, 0xFFFFFF))
     # colors_label = [colors[int(x[2])] for x in lista_archi]
 
-    action_text=load_edges_label_custom()
+    action_text = load_edges_label_custom()
 
     edge_label_trace = go.Scatter(x=x_text,
                                   y=y_text,
-                                  mode='text',
-                                  # text=label_archi_,
+                                  mode='markers',
                                   text=action_text,
                                   hoverinfo='text',
-                                  textposition='middle center',
+                                  textposition='bottom center',
+                                  marker=dict(symbol='circle',
+                                              size=8,
+                                              opacity=0.5,
+                                              color = 'green'
+                                  ),
                                   textfont=dict(
                                       family="sans serif",
-                                      size=8,
-                                      color="crimson"
+                                      size=9,
+                                      color="#37ab4f"
                                   ),
-                                  marker_size=0.25,
+                                  #marker_size=0.25,
                                   )
 
     trace_edges_2D = go.Scatter(x=x_edges_2D,
@@ -336,10 +341,10 @@ def drawing_2D_interactive():
                                 mode='markers+text',
                                 opacity=1,
                                 marker=dict(symbol='circle',
-                                            size=18,
+                                            size=20,
                                             opacity=0.5,
                                             color=lista_colori,
-                                            line=dict(color='white', width=0.2)),
+                                            line=dict(color='black', width=0.1)),
                                 text=node_labels,
                                 hoverinfo='text')
 
@@ -355,11 +360,11 @@ def drawing_2D_interactive():
     for edge in edge_list_2D:
         annotations.append(dict(ax=spring_pos[edge[0]][0], ay=spring_pos[edge[0]][1], axref='x', ayref='y',
                                 x=spring_pos[edge[1]][0], y=spring_pos[edge[1]][1], xref='x', yref='y',
-                                showarrow=True, arrowhead=3, arrowsize=1.5, ))
+                                showarrow=True, arrowhead=2, arrowsize=1.5, ))
 
     # also need to create the layout for our plot
     layout = go.Layout(title="<br>Rappresentazione interattiva della saga Hrafnkel",
-                       width=1080,
+                       width=1025,
                        height=1025,
                        showlegend=False,
                        annotations=annotations,
@@ -374,10 +379,11 @@ def drawing_2D_interactive():
     data = [trace_edges_2D,
             trace_nodes_2D,
             edge_label_trace]
+
     fig = go.Figure(data=data, layout=layout)
-    fig.update_layout(yaxis=dict(scaleanchor="x", scaleratio=1.3), plot_bgcolor='rgb(255,255,255)')
+    fig.update_layout(yaxis=dict(scaleanchor="x", scaleratio=1.1), plot_bgcolor='rgb(255,255,255)')
     fig.update_layout(uniformtext_minsize=3)
-    fig.update_traces(mode="markers+text")
+    #fig.update_traces(mode="markers+text")
     fig.show()
     # go.plot(fig)
 
@@ -530,4 +536,4 @@ def drawing_3D():
     fig.show()
 
 
-drawing_3D()
+#drawing_3D()
