@@ -9,7 +9,6 @@ import plotly.offline as py
 import pandas as pd
 
 
-
 def load_nodes(path_nodes='graph_nodes.csv'):
     lista_nodi = dict()
     with open(path_nodes, 'r') as read_obj:
@@ -43,9 +42,9 @@ def load_edges(path_edges="graph.json", interactive=False):
     if interactive:
         print('Interactive')
         for arco in graph["links"]:
-            exit_count = lista_archi.count((arco["source"], arco["target"], arco['action']))
+            exit_count = lista_archi.count((arco["source"], arco["target"], arco['action_description']))
             if exit_count < 1:
-                lista_archi.append((arco["source"], arco["target"], arco['action']))
+                lista_archi.append((arco["source"], arco["target"], arco['action_description']))
 
     print("Archi da rappresentare")
     print(len(lista_archi))
@@ -70,27 +69,40 @@ def load_edge_label_interactive():
     return lista_label
 
 
-
-
 def load_edges_label_custom():
     with open('graph.json') as json_file:
         graph = json.load(json_file)
 
-    lista_tmp = list()
-    lista_label = list()
+    lista_label_custom = list()
+    lista_archi = list()
+    lista_supporto = list()
+
     for arco in graph["links"]:
-        prova = 'description=' + ' ' + arco['action_description'] + ' ' + 'chapter=' + ' ' + arco[
-            "chapter"] + ' ' + 'page=' + ' ' + arco['page']
-        exit_count = lista_tmp.count((arco["source"], arco["target"], arco['action']))
+        exit_count = lista_archi.count((arco['source'], arco['target'], arco["action_description"]))
         if exit_count < 1:
-            lista_tmp.append(('\n'+arco['action_description'])+'\n')
-            lista_label.append(prova)
-    # print('Label archi interactive')
-    # print(len(lista_label))
-    return lista_tmp
+            lista_archi.append((arco['source'], arco['target'], arco["action_description"]))
+
+    for arco in graph['links']:
+        temp = arco["action_description"]
+        count = lista_supporto.count((arco['source'], arco['target']))
+        if count < 1:
+            lista_label_custom.append(temp)
+            lista_supporto.append((arco['source'], arco['target']))
+        else:
+            for temporaneo in lista_archi:
+                if (temporaneo[0], temporaneo[1]) == (arco['source'], arco['target']):
+                    temp = temp + ' ' + temporaneo[2] + '\t'+'\n'
+                    #lista_archi.remove((arco['source'], arco['target'], arco["action_description"]))
+                    lista_supporto.append((arco['source'], arco['target']))
+
+            lista_label_custom.append(temp)
+
+    print('Lista custom')
+    print(len(lista_label_custom))
+    return lista_label_custom
+
 
 temporanea = load_edge_label_interactive()
-
 
 
 def load_nodes_label(path_nodes="graph.json"):
@@ -225,7 +237,7 @@ def drawing_2D():
     nx.draw(G, pos=spring_pos, with_labels=True, font_size=15, nodelist=neutri, node_color='#ab3776', node_size=600,
             alpha=0.4, width=0.4, labels=lista_label, arrowsize=10)
 
-    plt.figure(3, figsize=(10, 10))
+    plt.figure(3, figsize=(12, 15))
     plt.show()
     print("Numero nodi nel grafo:")
     print(G.number_of_nodes())
@@ -234,7 +246,7 @@ def drawing_2D():
     print(G.number_of_edges())
 
 
-drawing_2D()
+# drawing_2D()
 
 
 def drawing_2D_interactive():
@@ -310,14 +322,13 @@ def drawing_2D_interactive():
                                   marker=dict(symbol='circle',
                                               size=8,
                                               opacity=0.5,
-                                              color = 'green'
-                                  ),
+                                              color='#654321'
+                                              ),
                                   textfont=dict(
                                       family="sans serif",
                                       size=9,
-                                      color="#37ab4f"
-                                  ),
-                                  #marker_size=0.25,
+                                      color="white"
+                                  )
                                   )
 
     trace_edges_2D = go.Scatter(x=x_edges_2D,
@@ -348,7 +359,7 @@ def drawing_2D_interactive():
                                 text=node_labels,
                                 hoverinfo='text')
 
-    axis = dict(showbackground=False,
+    axis = dict(showbackground=True,
                 showline=False,
                 zeroline=False,
                 showgrid=False,
@@ -363,7 +374,7 @@ def drawing_2D_interactive():
                                 showarrow=True, arrowhead=2, arrowsize=1.5, ))
 
     # also need to create the layout for our plot
-    layout = go.Layout(title="<br>Rappresentazione interattiva della saga Hrafnkel",
+    layout = go.Layout(title="Rappresentazione interattiva della saga Hrafnkel",
                        width=1025,
                        height=1025,
                        showlegend=False,
@@ -383,7 +394,7 @@ def drawing_2D_interactive():
     fig = go.Figure(data=data, layout=layout)
     fig.update_layout(yaxis=dict(scaleanchor="x", scaleratio=1.1), plot_bgcolor='rgb(255,255,255)')
     fig.update_layout(uniformtext_minsize=3)
-    #fig.update_traces(mode="markers+text")
+    # fig.update_traces(mode="markers+text")
     fig.show()
     # go.plot(fig)
 
@@ -514,7 +525,7 @@ def drawing_3D():
     axis = dict(showbackground=True,
                 showline=False,
                 zeroline=False,
-                showgrid=True,
+                showgrid=False,
                 showticklabels=False,
                 title='')
 
@@ -535,5 +546,4 @@ def drawing_3D():
     fig = go.Figure(data=data, layout=layout)
     fig.show()
 
-
-#drawing_3D()
+# drawing_3D()
