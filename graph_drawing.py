@@ -337,7 +337,7 @@ def drawing_2D_interactive():
                                 opacity=0.2,
                                 line=dict(color="black", width=0.2),
 
-                                marker=dict(size=8,
+                                marker=dict(size=5,
                                             opacity=0.3,
                                             line=dict(color='black', width=0.1)),
                                 # text=label_archi_,
@@ -352,7 +352,7 @@ def drawing_2D_interactive():
                                 mode='markers+text',
                                 opacity=1,
                                 marker=dict(symbol='circle',
-                                            size=20,
+                                            size=30,
                                             opacity=0.5,
                                             color=lista_colori,
                                             line=dict(color='black', width=0.1)),
