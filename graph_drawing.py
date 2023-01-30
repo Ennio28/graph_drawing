@@ -320,8 +320,8 @@ def drawing_2D_interactive():
                                   hoverinfo='text',
                                   textposition='bottom center',
                                   marker=dict(symbol='circle',
-                                              size=8,
-                                              opacity=0.5,
+                                              size=6,
+                                              opacity=0.4,
                                               color='#654321'
                                               ),
                                   textfont=dict(
@@ -334,17 +334,12 @@ def drawing_2D_interactive():
     trace_edges_2D = go.Scatter(x=x_edges_2D,
                                 y=y_edges_2D,
                                 mode='lines+text',
-                                opacity=0.2,
+                                opacity=0.1,
                                 line=dict(color="black", width=0.2),
 
                                 marker=dict(size=5,
-                                            opacity=0.3,
+                                            opacity=0.2,
                                             line=dict(color='black', width=0.1)),
-                                # text=label_archi_,
-                                # hoverinfo='text',
-                                # textfont=dict(
-                                #    size=10
-                                # ),
                                 )
 
     trace_nodes_2D = go.Scatter(x=x_nodes_2D,
